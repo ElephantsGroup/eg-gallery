@@ -1,0 +1,31 @@
+{
+    "name": "elephantsgroup/eg-gallery",
+    "description": "Yii2 gallery management module",
+    "keywords": ["yii", "yii2", "gallery", "elephantsgroup"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jalal Jaberi",
+            "email": "j_jaberi@yahoo.com"
+        },
+        {
+            "name": "Arezou Zahedi Majd",
+            "email": "a_majd_8@yahoo.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "elephantsgroup/eg-base": "~1",
+        "elephantsgroup/eg-stat": "~1",
+        "elephantsgroup/eg-jdf": "~1",
+		"elephantsgroup/eg-jdate": "~1"
+    },
+    "config": {
+        "process-timeout": 1500,
+        "secure-http": false
+    },
+    "autoload": {
+        "psr-4": { "elephantsGroup\\gallery\\": "" }
+    }
+}

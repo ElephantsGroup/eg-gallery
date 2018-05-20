@@ -17,7 +17,7 @@ use yii\web\View;
  */
 class PicAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/elephantsgroup/yii2-gallery/assets';
+    public $sourcePath = '@vendor/elephantsgroup/eg-gallery/assets';
    
     public function init() {
         $this->jsOptions['position'] = View::POS_END;

@@ -1,6 +1,5 @@
 <?php
 
-use yii\db\Schema;
 use yii\db\Migration;
 
 class m150816_201706_create_gallery_table extends Migration
@@ -76,231 +75,106 @@ class m150816_201706_create_gallery_table extends Migration
         $this->addForeignKey('fk_gallery_video_album', '{{%eg_gallery_video}}', 'album_id', '{{%eg_gallery_album}}', 'id', 'RESTRICT', 'CASCADE');
 
         $this->insert('{{%eg_gallery_category}}', [
+			'id' => 1,
             'name' => 'عمومی',
+			'status' => 1,
         ]);
         $this->insert('{{%eg_gallery_category_translation}}', [
             'category_id' => 1,
             'language' => 'fa-IR',
             'title' => 'عمومی',
         ]);
+        $this->insert('{{%eg_gallery_category_translation}}', [
+            'category_id' => 1,
+            'language' => 'en-US',
+            'title' => 'public',
+        ]);
         $this->insert('{{%eg_gallery_album}}', [
+			'id' => 1,
             'name' => 'عمومی',
             'category_id' => 1,
             'logo' => 'album-1.png',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_album_translation}}', [
             'album_id' => 1,
             'language' => 'fa-IR',
-            'title' => 'پروژه پلت فرم',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'title' => 'پلت فرم eg-cms',
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
+        ]);
+        $this->insert('{{%eg_gallery_album_translation}}', [
+            'album_id' => 1,
+            'language' => 'en-US',
+            'title' => 'eg-cms platform',
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 1,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 1',
+            'name' => 'eg-cms1',
             'picture' => 'picture1.jpg',
             'thumb' => 'thumb1.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 2,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 2',
+            'name' => 'eg-cms2',
             'picture' => 'picture2.jpg',
             'thumb' => 'thumb2.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 3,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 3',
+            'name' => 'eg-cms3',
             'picture' => 'picture3.jpg',
             'thumb' => 'thumb3.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 4,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 4',
+            'name' => 'eg-cms4',
             'picture' => 'picture4.jpg',
             'thumb' => 'thumb4.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 5,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 5',
+            'name' => 'eg-cms5',
             'picture' => 'picture5.jpg',
             'thumb' => 'thumb5.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
         $this->insert('{{%eg_gallery_picture}}', [
+			'id' => 6,
             'album_id' => 1,
-            'name' => 'پلت فرم کلید 6',
+            'name' => 'eg-cms6',
             'picture' => 'picture6.jpg',
             'thumb' => 'thumb6.jpg',
             'status' => '1',
-            'update_time' => 1467629406,
-            'creation_time' => 1467629406,
+            'creation_time' => date('Y-m-d H:i:s',time()),
+            'update_time' => date('Y-m-d H:i:s',time()),
         ]);
-
-        $this->insert('{{%auth_item}}', [
-			'name' => '/gallery/category/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => '/gallery/category-translation/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => '/gallery/album/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => '/gallery/album-translation/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => '/gallery/picture/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => '/gallery/video/*',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => 'gallery_management',
-			'type' => 2,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/category/*',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/category-translation/*',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/album/*',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/album-translation/*',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/picture/*',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/video/*',
-		]);
-		$this->insert('{{%auth_item}}', [
-			'name' => 'gallery_manager',
-			'type' => 1,
-			'created_at' => 1467629406,
-			'updated_at' => 1467629406
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'gallery_manager',
-			'child' => 'gallery_management',
-		]);
-		$this->insert('{{%auth_item_child}}', [
-			'parent' => 'super_admin',
-			'child' => 'gallery_manager',
-		]);
     }
 
     public function safeDown()
     {
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'super_admin',
-			'child' => 'gallery_manager',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_manager',
-			'child' => 'gallery_management',
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => 'gallery_manager',
-			'type' => 1,
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/video/*',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/picture/*',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/album-translation/*',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/album/*',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/category-translation/*',
-		]);
-		$this->delete('{{%auth_item_child}}', [
-			'parent' => 'gallery_management',
-			'child' => '/gallery/category/*',
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => 'gallery_management',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/video/*',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/picture/*',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/album-translation/*',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/album/*',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/category-translation/*',
-			'type' => 2,
-		]);
-		$this->delete('{{%auth_item}}', [
-			'name' => '/gallery/category/*',
-			'type' => 2,
-		]);
-
         $this->dropForeignKey('fk_gallery_video_album', '{{%eg_gallery_video}}');
         $this->dropTable('{{%eg_gallery_video}}');
 		$this->dropForeignKey('fk_gallery_picture_album', '{{%eg_gallery_picture}}');	

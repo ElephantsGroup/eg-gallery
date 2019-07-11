@@ -6,6 +6,18 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
+    public $pictureIconName = 'icon.jpg';
+    public $pictureIconWidth = 80;
+    public $pictureIconHeight = 80;
+    public $pictureLargName = 'picture-l.jpg';
+    public $pictureLargWidth = 540;
+    public $pictureLargHeight = 540;
+    public $pictureMediumName = 'picture-m.jpg';
+    public $pictureMediumWidth = 220;
+    public $pictureMediumHeight = 220;
+
+    public $pictureSize = [];
+
     public function init()
     {
         parent::init();

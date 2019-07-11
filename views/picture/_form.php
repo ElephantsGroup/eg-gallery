@@ -21,7 +21,7 @@ $module_base = \Yii::$app->getModule('base');
     <?= $form->field($model, 'album_id')->dropDownList(ArrayHelper::map(Album::find()->all(), 'id','name'), ['prompt' => $module::t('gallery', 'Select Album ...')]) ?>
 
     <?= $form->field($model, 'name')->textInput() ?>
-	
+
 	<?= $form->field($model, 'picture_file')->fileInput() ?>
 
     <?= $form->field($model, 'thumb_file')->fileInput() ?>

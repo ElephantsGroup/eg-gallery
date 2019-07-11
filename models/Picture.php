@@ -3,6 +3,7 @@
 namespace elephantsGroup\gallery\models;
 
 use Yii;
+use Grafika\Grafika;
 
 /**
  * This is the model class for table "{{%eg_gallery_picture}}".
@@ -26,14 +27,102 @@ class Picture extends \yii\db\ActiveRecord
 	public $thumb_file;
     public static $upload_url;
     public static $upload_path;
-	
+
 	public static $_STATUS_INACTIVE = 0;
 	public static $_STATUS_ACTIVE = 1;
-	
+
+	public $picture_size = [];
+
     public function init()
     {
-        self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/uploads/eg-gallery/picture/';
-        self::$upload_url = str_replace('/backend', '', Yii::getAlias('@web')) . '/uploads/eg-gallery/picture/';
+		$module = \Yii::$app->getModule('gallery');
+        self::$upload_path = str_replace('/admin', '', Yii::getAlias('@webroot')) . '/uploads/eg-gallery/picture/';
+        self::$upload_url = str_replace('/admin', '', Yii::getAlias('@web')) . '/uploads/eg-gallery/picture/';
+
+		if(!isset($module->pictureSize))
+		{
+			$this->picture_size = [
+				'icon' => [
+					'name' => $module->pictureIconName,
+					'width' => $module->pictureIconWidth,
+					'height' => $module->pictureIconHeight
+				],
+				'larg' => [
+					'name' => $module->pictureLargName,
+					'width' => $module->pictureLargWidth,
+					'height' => $module->pictureLargHeight
+				],
+				'medium' => [
+					'name' => $module->pictureMediumName,
+					'width' => $module->pictureMediumWidth,
+					'height' => $module->pictureMediumHeight
+				],
+			];
+		}
+		else
+		{
+			$this->picture_size = $module->pictureSize;
+
+			if(!isset($this->picture_size['icon']))
+			{
+				$this->picture_size['icon'] = [
+					'name' => $module->pictureIconName,
+					'width' => $module->pictureIconWidth,
+					'height' => $module->pictureIconHeight
+				];
+			}
+			else
+			{
+				if(!isset($this->picture_size['icon']['name']))
+					$this->picture_size['icon']['name'] = $module->pictureIconName;
+
+				if(!isset($this->picture_size['icon']['width']))
+					$this->picture_size['icon']['width'] = $module->pictureIconWidth;
+
+				if(!isset($this->picture_size['icon']['height']))
+					$this->picture_size['icon']['height'] = $module->pictureIconHeight;
+			}
+
+			if(!isset($this->picture_size['larg']))
+			{
+				$this->picture_size['larg'] = [
+					'name' => $module->pictureLargName,
+					'width' => $module->pictureLargWidth,
+					'height' => $module->pictureLargHeight
+				];
+			}
+			else
+			{
+				if(!isset($this->picture_size['larg']['name']))
+					$this->picture_size['larg']['name'] = $module->pictureLargName;
+
+				if(!isset($this->picture_size['larg']['width']))
+					$this->picture_size['larg']['width'] = $module->pictureLargWidth;
+
+				if(!isset($this->picture_size['larg']['height']))
+					$this->picture_size['larg']['height'] = $module->pictureLargHeight;
+			}
+
+			if(!isset($this->picture_size['medium']))
+			{
+				$this->picture_size['medium'] = [
+					'name' => $module->pictureMediumName,
+					'width' => $module->pictureMediumWidth,
+					'height' => $module->pictureMediumHeight
+				];
+			}
+			else
+			{
+				if(!isset($this->picture_size['medium']['name']))
+					$this->picture_size['medium']['name'] = $module->pictureMediumName;
+
+				if(!isset($this->picture_size['medium']['width']))
+					$this->picture_size['medium']['width'] = $module->pictureMediumWidth;
+
+				if(!isset($this->picture_size['medium']['height']))
+					$this->picture_size['medium']['height'] = $module->pictureMediumHeight;
+			}
+		}
         parent::init();
     }
 
@@ -119,7 +208,32 @@ class Picture extends \yii\db\ActiveRecord
 			$file_name = 'picture' . $this->id . '.' . $this->picture_file->extension;
 			$this->picture_file->saveAs($dir . $file_name);
 			$this->updateAttributes(['picture' => $file_name]);
+
+			$editor = Grafika::createEditor();
+			$editor->open( $image, self::$upload_path . $this->id . '/' . $this->picture);
+			$backup = clone $image;
+			$image_center = clone $image;
+
+			$width = $image->getWidth();
+			$height = $image->getHeight();
+
+			$size = $width > $height ? $height : $width;
+
+			$editor->crop( $image_center, $size, $size, 'center' );
+			$editor->save( $image_center, self::$upload_path . $this->id . '/cropped-center.jpg' ); // Cropped version
+			$image = [];
+
+			foreach ($this->picture_size as $key => $value)
+			{
+				$image[$key] = clone $image_center;
+				$editor->resizeExact( $image[$key], $value['width'], $value['height'] );
+				$editor->save( $image[$key], self::$upload_path . $this->id . '/' . $value['name']);
+
+			}
+
+			$editor->save( $backup, self::$upload_path . $this->id . '/original.jpg' ); // Unaffected by crop version
 		}
+
         if($this->thumb_file)
 		{
 			$dir = self::$upload_path . $this->id . '/';
@@ -136,14 +250,29 @@ class Picture extends \yii\db\ActiveRecord
     {
 		if($this->picture != 'default.png')
 		{
-			
+
 			$file_pah = self::$upload_path . $this->id . '/' . $this->picture;
 			if(file_exists($file_pah))
 				unlink($file_pah);
+
+			$file_path_center = self::$upload_path . $this->id . '/cropped-center.jpg';
+			if(file_exists($file_path_center))
+				unlink($file_path_center);
+
+			$file_path_original = self::$upload_path . $this->id . '/original.jpg';
+			if(file_exists($file_path_original))
+			unlink($file_path_original);
+
+			foreach ($this->picture_size as $key => $value)
+			{
+				$thumb_path = self::$upload_path . $this->id . '/'. $value['name'];
+				if(file_exists($thumb_path))
+					unlink($thumb_path);
+			}
 		}
 		if($this->thumb != 'default.png')
 		{
-			
+
 			$file_pah = self::$upload_path . $this->id . '/' . $this->thumb;
 			if(file_exists($file_pah))
 				unlink($file_pah);

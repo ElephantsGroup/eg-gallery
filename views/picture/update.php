@@ -14,8 +14,18 @@ $this->params['breadcrumbs'][] = $module::t('gallery', 'Update');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php
+		if($translation)
+			echo
+				$this->render('_form_update_translate', [
+					'model' => $model,
+					'translation' => $translation,
+				]);
+		else
+			echo
+				$this->render('_form_update', [
+					'model' => $model,
+				]);
+	?>
 
 </div>

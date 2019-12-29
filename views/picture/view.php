@@ -41,12 +41,22 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
                 'attribute' => 'thumb',
                 'value' => Picture::$upload_url . $model->id . '/' . $model->thumb,
-                'format' => ['image'],
+                'format' => ['image', [
+                    'width' => $model->picture_size['thumb']['width'],
+                    'height' => $model->picture_size['thumb']['height'],
+                    'alt' => ($model->description ?? $model->name) . ' - ' . $module::t('gallery', 'thumbnail'),
+                    'title' => ($model->title ?? $model->name) . ' - ' . $module::t('gallery', 'thumbnail'),
+                ]],
             ],
 			[
                 'attribute' => 'picture',
                 'value' => Picture::$upload_url . $model->id . '/' . $model->picture,
-                'format' => ['image'],
+                'format' => ['image', [
+                    'width' => $model->picture_size['medium']['width'],
+                    'height' => $model->picture_size['medium']['height'],
+                    'alt' => ($model->description ?? $model->name),
+                    'title' => ($model->title ?? $model->name),
+                ]],
             ],
 			[
 				'attribute'  => 'creation_time',

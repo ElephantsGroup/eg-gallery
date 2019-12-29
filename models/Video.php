@@ -18,6 +18,7 @@ use Yii;
  * @property string $creation_time
  *
  * @property Album $album
+ * @property VideoTranslation[] $translations
  */
 class Video extends \yii\db\ActiveRecord
 {
@@ -105,6 +106,14 @@ class Video extends \yii\db\ActiveRecord
     public function getAlbum()
     {
         return $this->hasOne(Album::className(), ['id' => 'album_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTranslations()
+    {
+        return $this->hasMany(VideoTranslation::className(), ['video_id' => 'id']);
     }
 
     public function beforeSave($insert)

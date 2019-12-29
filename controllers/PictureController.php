@@ -6,6 +6,7 @@ use Yii;
 use elephantsGroup\gallery\models\Album;
 use elephantsGroup\gallery\models\Picture;
 use elephantsGroup\gallery\models\PictureSearch;
+use elephantsGroup\gallery\models\PictureTranslation;
 //use yii\web\Controller;
 use elephantsGroup\base\EGController;
 use yii\web\NotFoundHttpException;
@@ -64,18 +65,29 @@ class PictureController extends EGController
     public function actionCreate()
     {
         $model = new Picture();
+		$translation = new PictureTranslation();
 
         if ($model->load(Yii::$app->request->post())) 
 		{
 			$model->picture_file = UploadedFile::getInstance($model, 'picture_file');
             $model->thumb_file = UploadedFile::getInstance($model, 'thumb_file');
-			if($model->save())
+            if($model->save())
+            {
+				if ($translation->load(Yii::$app->request->post()))
+				{
+					$translation->picture_id = $model->id;
+					$translation->language = $this->language;
+					if($translation->save())
+						return $this->redirect(['view', 'id' => $model->id]);					
+                }
 				return $this->redirect(['view', 'id' => $model->id]);
+            }
         }  
 		else 
 		{
             return $this->render('create', [
                 'model' => $model,
+				'translation' => $translation,
             ]);
         }
     }
@@ -89,18 +101,29 @@ class PictureController extends EGController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+		$translation = PictureTranslation::findOne(array('picture_id' => $id, 'language' => $this->language));
 
         if ($model->load(Yii::$app->request->post()))
 		{
             $model->picture_file = UploadedFile::getInstance($model, 'picture_file');
             $model->thumb_file = UploadedFile::getInstance($model, 'thumb_file');
             if($model->save())
+            {
+				if ($translation && $translation->load(Yii::$app->request->post()))
+				{
+					$translation->picture_id = $model->id;
+					$translation->language = $this->language;
+					if($translation->save())
+						return $this->redirect(['view', 'id' => $model->id]);					
+				}
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         }  
 		else 
 		{
             return $this->render('update', [
                 'model' => $model,
+				'translation' => $translation,
             ]);
         }
     }

@@ -17,6 +17,7 @@ use Grafika\Grafika;
  * @property string $creation_time
  *
  * @property Album $album
+ * @property PictureTranslation[] $translations
  */
 class Picture extends \yii\db\ActiveRecord
 {
@@ -39,31 +40,14 @@ class Picture extends \yii\db\ActiveRecord
         self::$upload_path = str_replace('/admin', '', Yii::getAlias('@webroot')) . '/uploads/eg-gallery/picture/';
         self::$upload_url = str_replace('/admin', '', Yii::getAlias('@web')) . '/uploads/eg-gallery/picture/';
 
-		if(!isset($module->pictureSize))
-		{
-			$this->picture_size = [
-				'icon' => [
-					'name' => $module->pictureIconName,
-					'width' => $module->pictureIconWidth,
-					'height' => $module->pictureIconHeight
-				],
-				'larg' => [
-					'name' => $module->pictureLargName,
-					'width' => $module->pictureLargWidth,
-					'height' => $module->pictureLargHeight
-				],
-				'medium' => [
-					'name' => $module->pictureMediumName,
-					'width' => $module->pictureMediumWidth,
-					'height' => $module->pictureMediumHeight
-				],
-			];
-		}
-		else
+		if (isset($module->pictureSize))
 		{
 			$this->picture_size = $module->pictureSize;
 
-			if(!isset($this->picture_size['icon']))
+			if (!isset($this->picture_size['original']) || !isset($this->picture_size['original']['name']))
+				$this->picture_size['original']['name'] = $module->pictureOriginalName;
+
+			if (!isset($this->picture_size['icon']))
 			{
 				$this->picture_size['icon'] = [
 					'name' => $module->pictureIconName,
@@ -73,34 +57,54 @@ class Picture extends \yii\db\ActiveRecord
 			}
 			else
 			{
-				if(!isset($this->picture_size['icon']['name']))
+				if (!isset($this->picture_size['icon']['name']))
 					$this->picture_size['icon']['name'] = $module->pictureIconName;
 
-				if(!isset($this->picture_size['icon']['width']))
+				if (!isset($this->picture_size['icon']['width']))
 					$this->picture_size['icon']['width'] = $module->pictureIconWidth;
 
-				if(!isset($this->picture_size['icon']['height']))
+				if (!isset($this->picture_size['icon']['height']))
 					$this->picture_size['icon']['height'] = $module->pictureIconHeight;
 			}
 
-			if(!isset($this->picture_size['larg']))
+			if (!isset($this->picture_size['thumb']))
 			{
-				$this->picture_size['larg'] = [
-					'name' => $module->pictureLargName,
-					'width' => $module->pictureLargWidth,
-					'height' => $module->pictureLargHeight
+				$this->picture_size['thumb'] = [
+					'name' => $module->pictureThumbName,
+					'width' => $module->pictureThumbWidth,
+					'height' => $module->pictureThumbHeight
 				];
 			}
 			else
 			{
-				if(!isset($this->picture_size['larg']['name']))
-					$this->picture_size['larg']['name'] = $module->pictureLargName;
+				if (!isset($this->picture_size['thumb']['name']))
+					$this->picture_size['thumb']['name'] = $module->pictureThumbName;
 
-				if(!isset($this->picture_size['larg']['width']))
-					$this->picture_size['larg']['width'] = $module->pictureLargWidth;
+				if (!isset($this->picture_size['thumb']['width']))
+					$this->picture_size['thumb']['width'] = $module->pictureThumbWidth;
 
-				if(!isset($this->picture_size['larg']['height']))
-					$this->picture_size['larg']['height'] = $module->pictureLargHeight;
+				if (!isset($this->picture_size['thumb']['height']))
+					$this->picture_size['thumb']['height'] = $module->pictureThumbHeight;
+			}
+
+			if (!isset($this->picture_size['small']))
+			{
+				$this->picture_size['small'] = [
+					'name' => $module->pictureSmallName,
+					'width' => $module->pictureSmallWidth,
+					'height' => $module->pictureSmallHeight
+				];
+			}
+			else
+			{
+				if (!isset($this->picture_size['small']['name']))
+					$this->picture_size['small']['name'] = $module->pictureSmallName;
+
+				if (!isset($this->picture_size['small']['width']))
+					$this->picture_size['small']['width'] = $module->pictureSmallWidth;
+
+				if (!isset($this->picture_size['small']['height']))
+					$this->picture_size['small']['height'] = $module->pictureSmallHeight;
 			}
 
 			if(!isset($this->picture_size['medium']))
@@ -113,17 +117,71 @@ class Picture extends \yii\db\ActiveRecord
 			}
 			else
 			{
-				if(!isset($this->picture_size['medium']['name']))
+				if (!isset($this->picture_size['medium']['name']))
 					$this->picture_size['medium']['name'] = $module->pictureMediumName;
 
-				if(!isset($this->picture_size['medium']['width']))
+				if (!isset($this->picture_size['medium']['width']))
 					$this->picture_size['medium']['width'] = $module->pictureMediumWidth;
 
-				if(!isset($this->picture_size['medium']['height']))
+				if (!isset($this->picture_size['medium']['height']))
 					$this->picture_size['medium']['height'] = $module->pictureMediumHeight;
 			}
+
+			if (!isset($this->picture_size['large']))
+			{
+				$this->picture_size['large'] = [
+					'name' => $module->pictureLargeName,
+					'width' => $module->pictureLargeWidth,
+					'height' => $module->pictureLargeHeight
+				];
+			}
+			else
+			{
+				if (!isset($this->picture_size['large']['name']))
+					$this->picture_size['large']['name'] = $module->pictureLargeName;
+
+				if (!isset($this->picture_size['large']['width']))
+					$this->picture_size['large']['width'] = $module->pictureLargeWidth;
+
+				if (!isset($this->picture_size['large']['height']))
+					$this->picture_size['large']['height'] = $module->pictureLargeHeight;
+			}
 		}
-        parent::init();
+		else
+		{
+			$this->picture_size = [
+				'original' => [
+					'name' => $module->pictureOriginalName,
+				],
+				'icon' => [
+					'name' => $module->pictureIconName,
+					'width' => $module->pictureIconWidth,
+					'height' => $module->pictureIconHeight
+				],
+				'thumb' => [
+					'name' => $module->pictureThumbName,
+					'width' => $module->pictureThumbWidth,
+					'height' => $module->pictureThumbHeight
+				],
+				'smalll' => [
+					'name' => $module->pictureSmallName,
+					'width' => $module->pictureSmallWidth,
+					'height' => $module->pictureSmallHeight
+				],
+				'medium' => [
+					'name' => $module->pictureMediumName,
+					'width' => $module->pictureMediumWidth,
+					'height' => $module->pictureMediumHeight
+				],
+				'large' => [
+					'name' => $module->pictureLargeName,
+					'width' => $module->pictureLargeWidth,
+					'height' => $module->pictureLargeHeight
+				],
+			];
+		}
+
+		parent::init();
     }
 
 	public static function getStatus()
@@ -147,6 +205,7 @@ class Picture extends \yii\db\ActiveRecord
     {
         return [
             [['album_id'], 'required'],
+            [['name'], 'string'],
             [['album_id', 'status', 'sort_order'], 'integer'],
             [['status'], 'default', 'value' => self::$_STATUS_INACTIVE],
 			[['status'], 'in', 'range' => array_keys(self::getStatus())],
@@ -187,7 +246,31 @@ class Picture extends \yii\db\ActiveRecord
         return $this->hasOne(Album::className(), ['id' => 'album_id']);
     }
 
-    public function beforeSave($insert)
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTranslations()
+    {
+        return $this->hasMany(PictureTranslation::className(), ['picture_id' => 'id']);
+    }
+
+	public function getTitle()
+	{
+		$translate = PictureTranslation::findOne(['picture_id'=>$this->id, 'language'=>Yii::$app->language]);
+		if($translate)
+			return $translate->title;
+		return null;
+	}
+
+	public function getDescription()
+	{
+		$translate = PictureTranslation::findOne(['picture_id'=>$this->id, 'language'=>Yii::$app->language]);
+		if($translate)
+			return $translate->description;
+		return null;
+	}
+
+	public function beforeSave($insert)
     {
 		$date = new \DateTime();
 		$date->setTimestamp(time());
@@ -200,7 +283,7 @@ class Picture extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if($this->picture_file)
+		if ($this->picture_file)
 		{
 			$dir = self::$upload_path . $this->id . '/';
 			if(!file_exists($dir))
@@ -225,16 +308,21 @@ class Picture extends \yii\db\ActiveRecord
 
 			foreach ($this->picture_size as $key => $value)
 			{
-				$image[$key] = clone $image_center;
-				$editor->resizeExact( $image[$key], $value['width'], $value['height'] );
-				$editor->save( $image[$key], self::$upload_path . $this->id . '/' . $value['name']);
+				if ($key === 'original')
+					continue;
+				else if ($key === 'icon' || $key === 'thumb')
+					$image[$key] = clone $image_center;
+				else
+					$image[$key] = clone $backup;
 
+				$editor->resizeExact($image[$key], $value['width'], $value['height']);
+				$editor->save($image[$key], self::$upload_path . $this->id . '/' . $value['name']);
 			}
 
-			$editor->save( $backup, self::$upload_path . $this->id . '/original.jpg' ); // Unaffected by crop version
+			$editor->save($backup, self::$upload_path . $this->id . '/' . $this->picture_size['original']['name']); // Unaffected by crop version
 		}
 
-        if($this->thumb_file)
+        if ($this->thumb_file)
 		{
 			$dir = self::$upload_path . $this->id . '/';
 			if(!file_exists($dir))
@@ -243,25 +331,36 @@ class Picture extends \yii\db\ActiveRecord
 			$this->thumb_file->saveAs($dir . $file_name);
 			$this->updateAttributes(['thumb' => $file_name]);
 		}
-        return parent::afterSave($insert, $changedAttributes);
+		else
+		{
+			$dir = self::$upload_path . $this->id . '/';
+			if(!file_exists($dir))
+				mkdir($dir, 0777, true);
+			$file_name = $this->picture_size['thumb']['name'];
+			$this->updateAttributes(['thumb' => $file_name]);
+		}
+
+		return parent::afterSave($insert, $changedAttributes);
     }
 
     public function beforeDelete()
     {
-		if($this->picture != 'default.png')
-		{
+		foreach($this->translations as $translation)
+			$translation->delete();
 
-			$file_pah = self::$upload_path . $this->id . '/' . $this->picture;
-			if(file_exists($file_pah))
-				unlink($file_pah);
+		if ($this->picture != 'default.png')
+		{
+			$file_path = self::$upload_path . $this->id . '/' . $this->picture;
+			if(file_exists($file_path))
+				unlink($file_path);
 
 			$file_path_center = self::$upload_path . $this->id . '/cropped-center.jpg';
 			if(file_exists($file_path_center))
 				unlink($file_path_center);
 
-			$file_path_original = self::$upload_path . $this->id . '/original.jpg';
+			$file_path_original = self::$upload_path . $this->id . $this->picture_size['original']['name'];
 			if(file_exists($file_path_original))
-			unlink($file_path_original);
+				unlink($file_path_original);
 
 			foreach ($this->picture_size as $key => $value)
 			{
@@ -270,13 +369,16 @@ class Picture extends \yii\db\ActiveRecord
 					unlink($thumb_path);
 			}
 		}
-		if($this->thumb != 'default.png')
+		if ($this->thumb != 'default.png')
 		{
 
 			$file_pah = self::$upload_path . $this->id . '/' . $this->thumb;
 			if(file_exists($file_pah))
 				unlink($file_pah);
 		}
+
+		// TODO; delete folder
+
 		return parent::beforeDelete();
     }
 }

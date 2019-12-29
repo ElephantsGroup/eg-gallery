@@ -66,7 +66,7 @@ class CategoryController extends EGController
         $model = new Category();
 		$translation = new CategoryTranslation();
 
-		if ($model->load(Yii::$app->request->post())) 
+		if ($model->load(Yii::$app->request->post()))
 		{
 			$model->logo_file = UploadedFile::getInstance($model, 'logo_file');
 			if($model->save())
@@ -76,11 +76,11 @@ class CategoryController extends EGController
 					$translation->category_id = $model->id;
 					$translation->language = $this->language;
 					if($translation->save())
-						return $this->redirect(['view', 'id' => $model->id]);					
+						return $this->redirect(['view', 'id' => $model->id]);
 				}
 				return $this->redirect(['view', 'id' => $model->id]);
 			}
-        } 
+        }
 		else {
             return $this->render('create', [
                 'model' => $model,
@@ -110,7 +110,7 @@ class CategoryController extends EGController
 					$translation->category_id = $model->id;
 					$translation->language = $this->language;
 					if($translation->save())
-						return $this->redirect(['view', 'id' => $model->id]);					
+						return $this->redirect(['view', 'id' => $model->id]);
 				}
 				return $this->redirect(['view', 'id' => $model->id]);
 			}

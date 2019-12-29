@@ -23,13 +23,13 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-	public $logo_file;	 
+	public $logo_file;
     public static $upload_url;
     public static $upload_path;
 
 	public static $_STATUS_INACTIVE = 0;
 	public static $_STATUS_ACTIVE = 1;
-	
+
     public function init()
     {
         self::$upload_path = str_replace('/backend', '', Yii::getAlias('@webroot')) . '/uploads/eg-gallery/category/';
@@ -45,7 +45,7 @@ class Category extends \yii\db\ActiveRecord
 			self::$_STATUS_ACTIVE => $module::t('Active'),
 		];
 	}
-	
+
     public static function tableName()
     {
         return '{{%eg_gallery_category}}';
@@ -135,10 +135,10 @@ class Category extends \yii\db\ActiveRecord
     {
 		foreach($this->translations as $translation)
 			$translation->delete();
-	
+
 		foreach($this->albums as $album)
 			$album->delete();
-	
+
         if($this->logo != 'default.png')
 		{
 			$file_pah = self::$upload_path . $this->id . '/' . $this->logo;

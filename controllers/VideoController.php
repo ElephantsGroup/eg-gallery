@@ -5,6 +5,7 @@ namespace elephantsGroup\gallery\controllers;
 use Yii;
 use elephantsGroup\gallery\models\Video;
 use elephantsGroup\gallery\models\VideoSearch;
+use elephantsGroup\gallery\models\VideoTranslation;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,18 +64,29 @@ class VideoController extends EGController
     public function actionCreate()
     {
         $model = new Video();
+		$translation = new VideoTranslation();
 
         if ($model->load(Yii::$app->request->post()))
         {
             $model->video_file = UploadedFile::getInstance($model, 'video_file');
             $model->thumb_file = UploadedFile::getInstance($model, 'thumb_file');
             if($model->save())
+            {
+				if ($translation->load(Yii::$app->request->post()))
+				{
+					$translation->video_id = $model->id;
+					$translation->language = $this->language;
+					if($translation->save())
+						return $this->redirect(['view', 'id' => $model->id]);					
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
         else
         {
             return $this->render('create', [
                 'model' => $model,
+				'translation' => $translation,
             ]);
         }
     }
@@ -88,18 +100,29 @@ class VideoController extends EGController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+		$translation = VideoTranslation::findOne(array('video_id' => $id, 'language' => $this->language));
 
         if ($model->load(Yii::$app->request->post()))
         {
             $model->video_file = UploadedFile::getInstance($model, 'video_file');
             $model->thumb_file = UploadedFile::getInstance($model, 'thumb_file');
             if($model->save())
+            {
+				if ($translation && $translation->load(Yii::$app->request->post()))
+				{
+					$translation->video_id = $model->id;
+					$translation->language = $this->language;
+					if($translation->save())
+						return $this->redirect(['view', 'id' => $model->id]);					
+				}
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
         else
         {
             return $this->render('update', [
                 'model' => $model,
+				'translation' => $translation,
             ]);
         }
     }

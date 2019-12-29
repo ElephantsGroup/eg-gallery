@@ -30,6 +30,7 @@ class CategoryTranslationController extends EGController
     /**
      * Lists all CategoryTranslation models.
      * @return mixed
+     */
      
     public function actionIndex()
     {
@@ -42,7 +43,7 @@ class CategoryTranslationController extends EGController
         ]);
     }
 
-     *
+     /**
      * Displays a single CategoryTranslation model.
      * @param integer $category_id
      * @param string $language

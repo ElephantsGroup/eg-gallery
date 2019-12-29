@@ -30,6 +30,7 @@ class AlbumTranslationController extends EGController
     /**
      * Lists all AlbumTranslation models.
      * @return mixed
+     */
     
     public function actionIndex()
     {
@@ -42,7 +43,7 @@ class AlbumTranslationController extends EGController
         ]);
     }
 
-     *
+     /**
      * Displays a single AlbumTranslation model.
      * @param integer $album_id
      * @param string $language

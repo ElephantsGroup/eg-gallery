@@ -4,6 +4,7 @@ namespace elephantsGroup\gallery\models;
 
 use Yii;
 use Grafika\Grafika;
+use Grafika\Color;
 
 /**
  * This is the model class for table "{{%eg_gallery_picture}}".
@@ -52,7 +53,10 @@ class Picture extends \yii\db\ActiveRecord
 				$this->picture_size['icon'] = [
 					'name' => $module->pictureIconName,
 					'width' => $module->pictureIconWidth,
-					'height' => $module->pictureIconHeight
+					'height' => $module->pictureIconHeight,
+					'watermark' => $module->pictureIconWatermark === 'inherit' ? $module->watermark : $module->pictureIconWatermark,
+					'crosslines' => $module->pictureIconCrosslines === 'inherit' ? $module->crosslines : $module->pictureIconCrosslines,
+					'text' => $module->pictureIconText === 'inherit' ? $module->text : $module->pictureIconText
 				];
 			}
 			else
@@ -65,6 +69,15 @@ class Picture extends \yii\db\ActiveRecord
 
 				if (!isset($this->picture_size['icon']['height']))
 					$this->picture_size['icon']['height'] = $module->pictureIconHeight;
+
+				if (!isset($this->picture_size['icon']['watermark']))
+					$this->picture_size['icon']['watermark'] = $module->pictureIconWatermark;
+
+				if (!isset($this->picture_size['icon']['crosslines']))
+					$this->picture_size['icon']['crosslines'] = $module->pictureIconCrosslines;
+
+				if (!isset($this->picture_size['icon']['text']))
+					$this->picture_size['icon']['text'] = $module->pictureIconText === 'inherit' ? $module->text : $module->pictureIconText;
 			}
 
 			if (!isset($this->picture_size['thumb']))
@@ -72,7 +85,10 @@ class Picture extends \yii\db\ActiveRecord
 				$this->picture_size['thumb'] = [
 					'name' => $module->pictureThumbName,
 					'width' => $module->pictureThumbWidth,
-					'height' => $module->pictureThumbHeight
+					'height' => $module->pictureThumbHeight,
+					'watermark' => $module->pictureThumbWatermark === 'inherit' ? $module->watermark : $module->pictureThumbWatermark,
+					'crosslines' => $module->pictureThumbCrosslines === 'inherit' ? $module->crosslines : $module->pictureThumbCrosslines,
+					'text' => $module->pictureThumbText === 'inherit' ? $module->text : $module->pictureThumbText
 				];
 			}
 			else
@@ -85,6 +101,15 @@ class Picture extends \yii\db\ActiveRecord
 
 				if (!isset($this->picture_size['thumb']['height']))
 					$this->picture_size['thumb']['height'] = $module->pictureThumbHeight;
+
+				if (!isset($this->picture_size['thumb']['watermark']))
+					$this->picture_size['thumb']['watermark'] = $module->pictureThumbWatermark;
+
+				if (!isset($this->picture_size['thumb']['crosslines']))
+					$this->picture_size['thumb']['crosslines'] = $module->pictureThumbCrosslines;
+
+				if (!isset($this->picture_size['thumb']['text']))
+					$this->picture_size['thumb']['text'] = $module->pictureThumbText === 'inherit' ? $module->text : $module->pictureThumbText;
 			}
 
 			if (!isset($this->picture_size['small']))
@@ -92,7 +117,10 @@ class Picture extends \yii\db\ActiveRecord
 				$this->picture_size['small'] = [
 					'name' => $module->pictureSmallName,
 					'width' => $module->pictureSmallWidth,
-					'height' => $module->pictureSmallHeight
+					'height' => $module->pictureSmallHeight,
+					'watermark' => $module->pictureSmallWatermark === 'inherit' ? $module->watermark : $module->pictureSmallWatermark,
+					'crosslines' => $module->pictureSmallCrosslines === 'inherit' ? $module->crosslines : $module->pictureSmallCrosslines,
+					'text' => $module->pictureSmallText === 'inherit' ? $module->text : $module->pictureSmallText
 				];
 			}
 			else
@@ -105,6 +133,15 @@ class Picture extends \yii\db\ActiveRecord
 
 				if (!isset($this->picture_size['small']['height']))
 					$this->picture_size['small']['height'] = $module->pictureSmallHeight;
+
+				if (!isset($this->picture_size['small']['watermark']))
+					$this->picture_size['small']['watermark'] = $module->pictureSmallWatermark;
+
+				if (!isset($this->picture_size['small']['crosslines']))
+					$this->picture_size['small']['crosslines'] = $module->pictureSmallCrosslines;
+
+				if (!isset($this->picture_size['small']['text']))
+					$this->picture_size['small']['text'] = $module->pictureSmallText === 'inherit' ? $module->text : $module->pictureSmallText;
 			}
 
 			if(!isset($this->picture_size['medium']))
@@ -112,7 +149,10 @@ class Picture extends \yii\db\ActiveRecord
 				$this->picture_size['medium'] = [
 					'name' => $module->pictureMediumName,
 					'width' => $module->pictureMediumWidth,
-					'height' => $module->pictureMediumHeight
+					'height' => $module->pictureMediumHeight,
+					'watermark' => $module->pictureMediumWatermark === 'inherit' ? $module->watermark : $module->pictureMediumWatermark,
+					'crosslines' => $module->pictureMediumCrosslines === 'inherit' ? $module->crosslines : $module->pictureMediumCrosslines,
+					'text' => $module->pictureMediumText === 'inherit' ? $module->text : $module->pictureMediumText
 				];
 			}
 			else
@@ -125,6 +165,15 @@ class Picture extends \yii\db\ActiveRecord
 
 				if (!isset($this->picture_size['medium']['height']))
 					$this->picture_size['medium']['height'] = $module->pictureMediumHeight;
+
+				if (!isset($this->picture_size['medium']['watermark']))
+					$this->picture_size['medium']['watermark'] = $module->pictureMediumWatermark;
+
+				if (!isset($this->picture_size['medium']['crosslines']))
+					$this->picture_size['medium']['crosslines'] = $module->pictureMediumCrosslines;
+
+				if (!isset($this->picture_size['medium']['text']))
+					$this->picture_size['medium']['text'] = $module->pictureMediumText === 'inherit' ? $module->text : $module->pictureMediumText;
 			}
 
 			if (!isset($this->picture_size['large']))
@@ -132,7 +181,10 @@ class Picture extends \yii\db\ActiveRecord
 				$this->picture_size['large'] = [
 					'name' => $module->pictureLargeName,
 					'width' => $module->pictureLargeWidth,
-					'height' => $module->pictureLargeHeight
+					'height' => $module->pictureLargeHeight,
+					'watermark' => $module->pictureLargeWatermark === 'inherit' ? $module->watermark : $module->pictureLargeWatermark,
+					'crosslines' => $module->pictureLargeCrosslines === 'inherit' ? $module->crosslines : $module->pictureLargeCrosslines,
+					'text' => $module->pictureLargeText === 'inherit' ? $module->text : $module->pictureLargeText
 				];
 			}
 			else
@@ -145,6 +197,15 @@ class Picture extends \yii\db\ActiveRecord
 
 				if (!isset($this->picture_size['large']['height']))
 					$this->picture_size['large']['height'] = $module->pictureLargeHeight;
+
+				if (!isset($this->picture_size['large']['watermark']))
+					$this->picture_size['large']['watermark'] = $module->pictureLargeWatermark;
+
+				if (!isset($this->picture_size['large']['crosslines']))
+					$this->picture_size['large']['crosslines'] = $module->pictureLargeCrosslines;
+
+				if (!isset($this->picture_size['large']['text']))
+					$this->picture_size['large']['text'] = $module->pictureLargeText === 'inherit' ? $module->text : $module->pictureLargeText;
 			}
 		}
 		else
@@ -156,27 +217,42 @@ class Picture extends \yii\db\ActiveRecord
 				'icon' => [
 					'name' => $module->pictureIconName,
 					'width' => $module->pictureIconWidth,
-					'height' => $module->pictureIconHeight
+					'height' => $module->pictureIconHeight,
+					'watermark' => $module->pictureIconWatermark,
+					'crosslines' => $module->pictureIconCrosslines,
+					'text' => $module->pictureIconText
 				],
 				'thumb' => [
 					'name' => $module->pictureThumbName,
 					'width' => $module->pictureThumbWidth,
-					'height' => $module->pictureThumbHeight
+					'height' => $module->pictureThumbHeight,
+					'watermark' => $module->pictureThumbWatermark,
+					'crosslines' => $module->pictureThumbCrosslines,
+					'text' => $module->pictureThumbText
 				],
 				'smalll' => [
 					'name' => $module->pictureSmallName,
 					'width' => $module->pictureSmallWidth,
-					'height' => $module->pictureSmallHeight
+					'height' => $module->pictureSmallHeight,
+					'watermark' => $module->pictureSmallWatermark,
+					'crosslines' => $module->pictureSmallCrosslines,
+					'text' => $module->pictureSmallText
 				],
 				'medium' => [
 					'name' => $module->pictureMediumName,
 					'width' => $module->pictureMediumWidth,
-					'height' => $module->pictureMediumHeight
+					'height' => $module->pictureMediumHeight,
+					'watermark' => $module->pictureMediumWatermark,
+					'crosslines' => $module->pictureMediumCrosslines,
+					'text' => $module->pictureMediumText
 				],
 				'large' => [
 					'name' => $module->pictureLargeName,
 					'width' => $module->pictureLargeWidth,
-					'height' => $module->pictureLargeHeight
+					'height' => $module->pictureLargeHeight,
+					'watermark' => $module->pictureLargeWatermark,
+					'crosslines' => $module->pictureLargeCrosslines,
+					'text' => $module->pictureLargeText
 				],
 			];
 		}
@@ -281,7 +357,71 @@ class Picture extends \yii\db\ActiveRecord
 		return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changedAttributes)
+	public function generateImages($imageAddress)
+	{
+		$module = Yii::$app->getModule('gallery');
+
+		$editor = Grafika::createEditor();
+		$editor->open( $image, $imageAddress);
+		if (isset($module->watermark) && !empty($module->watermark))
+			$editor->open( $watermark, Yii::getAlias('@webroot') . $module->watermark ) ;
+		$backup = clone $image;
+		$image_center = clone $image;
+
+		$width = $image->getWidth();
+		$height = $image->getHeight();
+		$size = $width > $height ? $height : $width;
+		$editor->crop( $image_center, $size, $size, 'center' );
+
+		$image_center_watermark = clone $image_center;
+		if (isset($module->crosslines) && $module->crosslines)
+		{
+			$editor->draw( $image_center_watermark, Grafika::createDrawingObject('Line', array(0, 0), array($size, $size), 1, new Color('#FF0000')));
+			$editor->draw( $image_center_watermark, Grafika::createDrawingObject('Line', array(0, $size), array($size, 0), 1, new Color('#FF0000')));
+		}
+		if (isset($module->watermark) && !empty($module->watermark))
+		{
+			$editor->resizeExact( $watermark, intval($size / 7), intval($size / 7) );
+			$editor->blend( $image_center_watermark,  $watermark, 'multiply', 0.3, 'top-right' );
+		}
+		if (isset($module->text) && !empty($module->text))
+		{
+			$editor->text( $image_center_watermark, $module->text, 12, 5, 5 );
+		}
+		$editor->save( $image_center_watermark, self::$upload_path . $this->id . '/cropped-center.jpg' ); // Cropped version
+
+		$image = [];
+		foreach ($this->picture_size as $key => $value)
+		{
+			if ($key === 'original')
+				continue;
+			else if ($key === 'icon' || $key === 'thumb')
+				$image[$key] = clone $image_center;
+			else
+				$image[$key] = clone $backup;
+			$editor->resizeExact($image[$key], $value['width'], $value['height']);
+			$size = $value['width'] > $value['height'] ? $value['height'] : $value['width'];
+			if ($value['crosslines'])
+			{
+				$editor->draw( $image[$key], Grafika::createDrawingObject('Line', array(0, 0), array($value['width'], $value['height']), 1, new Color('#FF0000')));
+				$editor->draw( $image[$key], Grafika::createDrawingObject('Line', array(0, $value['height']), array($value['width'], 0), 1, new Color('#FF0000')));
+			}
+			if (!empty($value['text']))
+			{
+				$editor->text( $image[$key], $value['text'], 12, 5, 5 );
+			}
+			if ($value['watermark'])
+			{
+				$editor->resizeExact($watermark, intval($size / 7), intval($size / 7));
+				$editor->blend( $image[$key],  $watermark, 'multiply', 0.3, 'top-right' );
+			}
+			$editor->save($image[$key], self::$upload_path . $this->id . '/' . $value['name']);
+		}
+
+		$editor->save($backup, self::$upload_path . $this->id . '/' . $this->picture_size['original']['name']); // Unaffected by crop version
+	}
+
+	public function afterSave($insert, $changedAttributes)
     {
 		if ($this->picture_file)
 		{
@@ -291,35 +431,7 @@ class Picture extends \yii\db\ActiveRecord
 			$file_name = 'picture' . $this->id . '.' . $this->picture_file->extension;
 			$this->picture_file->saveAs($dir . $file_name);
 			$this->updateAttributes(['picture' => $file_name]);
-
-			$editor = Grafika::createEditor();
-			$editor->open( $image, self::$upload_path . $this->id . '/' . $this->picture);
-			$backup = clone $image;
-			$image_center = clone $image;
-
-			$width = $image->getWidth();
-			$height = $image->getHeight();
-
-			$size = $width > $height ? $height : $width;
-
-			$editor->crop( $image_center, $size, $size, 'center' );
-			$editor->save( $image_center, self::$upload_path . $this->id . '/cropped-center.jpg' ); // Cropped version
-			$image = [];
-
-			foreach ($this->picture_size as $key => $value)
-			{
-				if ($key === 'original')
-					continue;
-				else if ($key === 'icon' || $key === 'thumb')
-					$image[$key] = clone $image_center;
-				else
-					$image[$key] = clone $backup;
-
-				$editor->resizeExact($image[$key], $value['width'], $value['height']);
-				$editor->save($image[$key], self::$upload_path . $this->id . '/' . $value['name']);
-			}
-
-			$editor->save($backup, self::$upload_path . $this->id . '/' . $this->picture_size['original']['name']); // Unaffected by crop version
+			$this->generateImages(self::$upload_path . $this->id . '/' . $this->picture);
 		}
 
         if ($this->thumb_file)

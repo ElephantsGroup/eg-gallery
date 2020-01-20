@@ -27,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a(Yii::t('app', 'Generate Images'), ['generate-images', 'id' => $model->id], [
+            'class' => 'btn btn-primary',
+            'data' => [
+                'confirm' => Yii::t('app', 'Are you sure you want to regenerate images for this item?'),
+                'method' => 'post',
+            ],
+        ]) ?>
     </p>
 
     <?= DetailView::widget([

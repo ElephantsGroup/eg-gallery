@@ -142,6 +142,19 @@ class PictureController extends EGController
     }
 
     /**
+     * Regenerate images.
+     * If successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionGenerateImages($id)
+    {
+        $this->findModel($id)->generateImages();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
      * Finds the Picture model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id

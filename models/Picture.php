@@ -357,12 +357,12 @@ class Picture extends \yii\db\ActiveRecord
 		return parent::beforeSave($insert);
     }
 
-	public function generateImages($imageAddress)
+	public function generateImages()
 	{
 		$module = Yii::$app->getModule('gallery');
 
 		$editor = Grafika::createEditor();
-		$editor->open( $image, $imageAddress);
+		$editor->open( $image, self::$upload_path . $this->id . '/' . $this->picture );
 		if (isset($module->watermark) && !empty($module->watermark))
 			$editor->open( $watermark, Yii::getAlias('@webroot') . $module->watermark ) ;
 		$backup = clone $image;
@@ -431,7 +431,7 @@ class Picture extends \yii\db\ActiveRecord
 			$file_name = 'picture' . $this->id . '.' . $this->picture_file->extension;
 			$this->picture_file->saveAs($dir . $file_name);
 			$this->updateAttributes(['picture' => $file_name]);
-			$this->generateImages(self::$upload_path . $this->id . '/' . $this->picture);
+			$this->generateImages();
 		}
 
         if ($this->thumb_file)

@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 			[
                 'attribute' => 'picture',
-                'value' => Picture::$upload_url . $model->id . '/' . $model->picture,
+                'value' => Picture::$upload_url . $model->id . '/' . $model->picture_size['medium']['name'],
                 'format' => ['image', [
                     'width' => $model->picture_size['medium']['width'],
                     'height' => $model->picture_size['medium']['height'],

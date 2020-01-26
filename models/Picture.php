@@ -29,6 +29,7 @@ class Picture extends \yii\db\ActiveRecord
 	public $thumb_file;
     public static $upload_url;
     public static $upload_path;
+    public static $protected_upload_path;
 
 	public static $_STATUS_INACTIVE = 0;
 	public static $_STATUS_ACTIVE = 1;
@@ -40,6 +41,7 @@ class Picture extends \yii\db\ActiveRecord
 		$module = \Yii::$app->getModule('gallery');
         self::$upload_path = str_replace('/admin', '', Yii::getAlias('@webroot')) . '/uploads/eg-gallery/picture/';
         self::$upload_url = str_replace('/admin', '', Yii::getAlias('@web')) . '/uploads/eg-gallery/picture/';
+        self::$protected_upload_path = str_replace('/admin', '', Yii::getAlias('@webroot')) . '/resources/eg-gallery/picture/';
 
 		if (isset($module->pictureSize))
 		{
@@ -359,10 +361,18 @@ class Picture extends \yii\db\ActiveRecord
 
 	public function generateImages()
 	{
+		$dir = self::$upload_path . $this->id . '/';
+		if(!file_exists($dir))
+			mkdir($dir, 0755, true);
+
+		$dir = self::$protected_upload_path . $this->id . '/';
+		if (!file_exists($dir))
+			mkdir($dir, 0755, true);
+
 		$module = Yii::$app->getModule('gallery');
 
 		$editor = Grafika::createEditor();
-		$editor->open( $image, self::$upload_path . $this->id . '/' . $this->picture );
+		$editor->open( $image, self::$protected_upload_path . $this->id . '/' . $this->picture );
 		if (isset($module->watermark) && !empty($module->watermark))
 			$editor->open( $watermark, Yii::getAlias('@webroot') . $module->watermark ) ;
 		$backup = clone $image;
@@ -388,7 +398,7 @@ class Picture extends \yii\db\ActiveRecord
 		{
 			$editor->text( $image_center_watermark, $module->text, 12, 5, 5 );
 		}
-		$editor->save( $image_center_watermark, self::$upload_path . $this->id . '/cropped-center.jpg' ); // Cropped version
+		$editor->save( $image_center_watermark, self::$protected_upload_path . $this->id . '/cropped-center.jpg' ); // Cropped version
 
 		$image = [];
 		foreach ($this->picture_size as $key => $value)
@@ -418,7 +428,7 @@ class Picture extends \yii\db\ActiveRecord
 			$editor->save($image[$key], self::$upload_path . $this->id . '/' . $value['name']);
 		}
 
-		$editor->save($backup, self::$upload_path . $this->id . '/' . $this->picture_size['original']['name']); // Unaffected by crop version
+		$editor->save($backup, self::$protected_upload_path . $this->id . '/' . $this->picture_size['original']['name']); // Unaffected by crop version
 	}
 
 	public function afterSave($insert, $changedAttributes)
@@ -427,7 +437,12 @@ class Picture extends \yii\db\ActiveRecord
 		{
 			$dir = self::$upload_path . $this->id . '/';
 			if(!file_exists($dir))
-				mkdir($dir, 0777, true);
+				mkdir($dir, 0755, true);
+
+			$dir = self::$protected_upload_path . $this->id . '/';
+			if (!file_exists($dir))
+				mkdir($dir, 0755, true);
+
 			$file_name = 'picture' . $this->id . '.' . $this->picture_file->extension;
 			$this->picture_file->saveAs($dir . $file_name);
 			$this->updateAttributes(['picture' => $file_name]);
